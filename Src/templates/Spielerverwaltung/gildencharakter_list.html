@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <div class = 'jumbotron'>
+    <h1>
+      Willkommen bei der Charakterübersicht!
+    </h1>
+  </div>
+</div>
+<div class = "container">
+  <table class="table table-bordered">
+    <tr>
+      <th>Charaktername</th>
+      <th>Gildenrang</th>
+      <th>Spielername</th>
+    </tr>
+      {% for Charakter in gildencharakter_list %}
+        <tr>
+          <td>{{ Charakter.Charaktername }}</td>
+          <td>{{ Charakter.Gildenrang }}</td>
+          <td>
+            <div class="dropdown">
+              <select class="selectpicker" name="{{Charakter.pk}}" value="{{Charakter.pk}}" data-live-search="true" form="edit_characters">
+                {% for Spieler in Spielerliste %}
+                {% if Charakter.Spielername == Spieler %}
+                <option class="dropdown-item" value="{{ Spieler.Spielername }}" selected>{{ Spieler.Spielername }}</option>
+                {% else %}
+                <option class="dropdown-item" value="{{ Spieler.Spielername }}">{{ Spieler.Spielername }}</option>
+                {% endif %}
+                {% endfor %}
+                {% if not Charakter.Spielername %}
+                <option class="dropdown-item" value="false" selected>Noch kein Spieler zugewiesen</option>
+                {% endif %}
+              </select>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+  </table>
+  <div class = "row">
+    <div class = "col">
+      <form method="post" id="update_charlist">{% csrf_token %}
+        <button name='update characters' type="submit" class="btn btn-primary">Charakterliste von Blizzard updaten!</button>
+      </form>
+    </div>
+    <div class="col">
+      <p>Es befinden sich {{ paginator.count }} in der Übersicht!</p>
+    </div>
+    <form method='post' id="edit_characters">{% csrf_token %}
+      <div class="col text-right">
+        <button type="submit" name="save" value="save" class="btn btn-primary">Änderungen speichern</button>
+      </div>
+    </form>
+  </div>
+</div>
+<nav aria-label="Page navigation example">
+  <div class="row justify-content-center align-self-center">
+    <ul class="pagination">
+      <li class="page-item">
+        {% if page_obj.has_previous %}
+          <a class='page-link' href="?page={{ page_obj.previous_page_number }}">
+            prev
+          </a>
+        {% else %}
+          <span>prev</span>
+        {% endif %}
+      </li>
+
+      {% for page_number in paginator.page_range %}
+        {% if page_number == page_obj.number %}
+          <li class="page-item active">
+            <span class="page-link">{{ page_number }}</span>
+          </li>
+        {% else %}
+          <li>
+            <a class='page-link' href="?page={{ page_number }}">
+              {{ page_number }}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      <li>
+        {% if page_obj.has_next %}
+          <a class='page-link' href="?page={{ page_obj.next_page_number }}">
+            next
+          </a>
+        {% else %}
+          <span>next</span>
+        {% endif %}
+      </li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}

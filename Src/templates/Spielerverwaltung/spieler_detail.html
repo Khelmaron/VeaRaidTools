@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>{{ spieler.Spielername }}</p>
+<p>{{ spieler.Anlagedatum }}</p>
+<p>{{ spieler.Aktiv }}</p>
+
+{% for char in characters %}
+<p> {{ char }} </p>
+{% endfor %}
+
+{% endblock %}

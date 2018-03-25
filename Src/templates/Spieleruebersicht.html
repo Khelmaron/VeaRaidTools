@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <div class = 'jumbotron'>
+    <h1>
+      Willkommen bei der Spielerübersicht!
+    </h1>
+  </div>
+</div>
+<div class = "container">
+  <form action = "/Spieleruebersicht/" method="post">{% csrf_token %}
+    <table class="table table-bordered">
+      <tr>
+        <th width="10%">zum Löschen markieren</th>
+        <th>Spielername</th>
+        <th>Anlagedatum</th>
+      </tr>
+        {% for Spieler in Spielerliste %}
+          <tr>
+             <td>
+               <div class="checkbox">
+                 <input type="checkbox" name="Selected_Players" value={{Spieler.Spielername}}>
+               </div>
+             </td>
+             <td><a href={% url 'player_details' pk=Spieler.pk %}>{{ Spieler.Spielername }}</a></td>
+             <td>{{ Spieler.Anlagedatum }}</td>
+          </tr>
+        {% endfor %}
+    </table>
+    <div class="form-group">
+      {{ form.as_p }}
+      <button type="submit" name="add" value="Add" class="btn btn-primary">Spieler hinzufügen</button>
+    </div>
+    <div class="form-group">
+      <button type="submit" name='delete' value='Delete' class="btn btn-danger">Markierte löschen!</button>
+    </div>
+  </form>
+
+</div>
+{% endblock %}

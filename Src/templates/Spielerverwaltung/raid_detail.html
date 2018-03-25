@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class = 'container'>
+  <div class = "col col-md-7">
+  {% if success %}
+  <p> Daten erfolgreich von Warcraftlogs importiert!</p>
+  {% endif %}
+  </div>
+  <div class = "col col-md-7">
+    <table class = 'table table-striped table-dark'>
+      <thead>
+        <th>{{ raid.InstanceName }} vom {{ raid.Raiddatum }}</th>
+      </thead>
+      {% for info in Raidinfomrationen %}
+      <tr>
+        <td>{{ info.Teilnehmer.Spielername }}</td>
+        <td>{{ info.Teilnehmer }} </td>
+      </tr>
+      {% endfor %}
+      <p> {{ ValueTeilnehmer }} </p>
+    </table>
+  </div>
+</div>
+{% endblock %}

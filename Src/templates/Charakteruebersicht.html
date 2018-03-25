@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <div class = 'jumbotron'>
+    <h1>
+      Willkommen bei der Charakterübersicht!
+    </h1>
+  </div>
+</div>
+<div class = "container">
+  <table class="table table-bordered">
+    <tr>
+      <th>Spielername</th>
+      <th>Gildenrang</th>
+    </tr>
+      {% for Charakter in Charakterliste %}
+        <tr>
+           <td>{{ Charakter.Charaktername }}</td>
+           <td>{{ Charakter.Gildenrang }}</td>
+           {% if not Charakter.Spielername %}
+          <td>
+  <!--
+            {% for Spieler in Spielerliste %}
+            <p>{{ Spieler.Spielername }}</p>
+            {% endfor %}
+
+//-->
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown button
+              </button>
+              <div class="dropdown show">
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  {% for Spieler in Spielerliste %}
+                  <a class="dropdown-item" href="#">{{ Spieler.Spielername }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+          </td>
+          {% else %}
+          <td>{{ Charakter.Spielername }}</td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+  </table>
+  <form method="post">{% csrf_token %}
+    <button name='update characters' type="submit">Charakterliste updaten!</button>
+  </form>
+</div>
+{% endblock %}

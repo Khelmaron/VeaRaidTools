@@ -1,0 +1,7 @@
+certifi==2018.1.18
+Django==2.0.2
+olefile==0.45.1
+Pillow==5.0.0
+pytz==2018.3
+selenium==3.9.0
+wincertstore==0.2
