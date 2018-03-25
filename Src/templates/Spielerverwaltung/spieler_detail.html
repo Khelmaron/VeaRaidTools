@@ -1,11 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>{{ spieler.Spielername }}</p>
-<p>{{ spieler.Anlagedatum }}</p>
-<p>{{ spieler.Aktiv }}</p>
-
-{% for char in characters %}
-<p> {{ char }} </p>
-{% endfor %}
-
+<div class='container'>
+  <div>
+    <table class='table bordered'>
+      <thead class="thead-dark">
+        <tr>
+          <th class='cold-md-4'>{{ spieler.Spielername }}</th>
+          <th class='cold-md-4'>{{ spieler.Anlagedatum }}</th>
+          <th class='cold-md-4'>{{ spieler.Aktiv }}</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for char in characters %}
+        <tr>
+          <td>{{ char }}</td>        
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}
