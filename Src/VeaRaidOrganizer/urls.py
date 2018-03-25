@@ -32,6 +32,6 @@ urlpatterns = [
     url(r'^Raiduebersicht/', RaidoverView.as_view(), name = 'Spieleruebersicht'),
     url(r'^Raiddetail/(?P<pk>\d+)/$', RaidDetailView.as_view(), name = 'raid_details'),
     url(r'^api/', PlayerViewSet.as_view({'get' : 'getPlayers'})), #  include('rest_framework.urls', namespace='rest_framework'))
-    url(r'^Playerdetail/(?P<pk>\w+)/$', PlayerDetailView.as_view(), name = 'player_details')
+    url(r'^Playerdetail/(?P<pk>[-\w]+)/$', PlayerDetailView.as_view(), name = 'player_details')
 
 ]
