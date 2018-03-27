@@ -3,16 +3,16 @@ from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from .models import Gildencharakter, Spieler, Raid, Raidinformationen, PlayerSerializer
+from .models import Gildencharakter, Spieler, Raid, Raidinformationen, PlayerSerializer, Attendency
 from .apiInterface import Guildmemberhandler, RaidlogInterface
-from .utils import get_raiddetails
+from .utils import get_raiddetails, get_new_logs
 import datetime
 from rest_framework import viewsets
 from rest_framework.response import Response
 
 from .forms import CreatePlayerForm
 from django.forms import Form
-from .utils import delete_players, assign_player, get_chars, update_activity
+from .utils import delete_players, assign_player, get_chars, update_activity, delete_attendence
 
 class homeView(TemplateView):
 
@@ -90,13 +90,13 @@ class RaidoverView(ListView):
     model = Raid
     paginate_by = 10
 
-    def get_queryset(self):
-
-        return super(RaidoverView, self).get_queryset().order_by('-Raiddatum')
-
     def post(self, request):
 
-        logs = RaidlogInterface.get_latest_report_ids()
+        if 'delete_logs' in request.POST:
+            Raid.objects.all().delete()
+            return HttpResponseRedirect('/Raiduebersicht/')
+
+        logs = get_new_logs()
         for log in logs:
             raid = Raid(WarcraftlogsID = log['id'], InstanceName = log['title'],
                 Raiddatum = datetime.datetime.fromtimestamp(log['start']/1000))
@@ -108,14 +108,6 @@ class RaidDetailView(DetailView):
 
     model = Raid
 
-##    def get_context_data(self, **kwargs):
-##        context = super(RaidDetailView, self).get_context_data(**kwargs)
-##        queryset_player = Raidinformationen.objects.filter()
-##        context['Spielerliste'] = queryset_player
-##        return context
-
-
-
     def get_context_data(self, **kwargs):
         context = super(RaidDetailView, self).get_context_data(**kwargs)
 
@@ -124,8 +116,6 @@ class RaidDetailView(DetailView):
         if not Raidinformationen.objects.filter(Raid = context['raid'].id).exists():
             get_raiddetails(context['raid'].WarcraftlogsID)
             context['success'] = True
-
-        context['Raidinfomrationen'] = Raidinformationen.objects.filter(Raid = context['raid'].id)
 
         return context
 
@@ -141,8 +131,13 @@ class PlayerDetailView(DetailView):
 
 #       Filter zuerst alle Charaktere, die zu dem Spieler zugeordnet sind, und übergibt diese an das template ind er Variable characters
         context['characters'] = Gildencharakter.objects.filter(Spielername__exact=context['spieler'])
+        context['latest_raids'] = Raid.objects.all()[:10]
         return context
 
+    def post(self, request, pk):
+
+        delete_attendence(Spieler.objects.get(pk=pk))
+        return HttpResponseRedirect('/Raiduebersicht/')
 
 class PlayerViewSet(viewsets.ModelViewSet):
 
