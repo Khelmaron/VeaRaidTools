@@ -1,0 +1,20 @@
+<a href={% url 'raid_details' pk=raid.pk %} style="color: rgb(0,0,0)" >
+  <div class="border-2" >
+    <div style='height: 200px' class="bg-dark">
+      {% if background %}
+      <div class="container bg-success">
+      {% else %}
+      <div class="container bg-danger">
+      {% endif %}
+        <div class="row h-25">
+          Datum: {{ raid.Raiddatum }}
+        </div>
+        <div class="row h-50">
+          Instanz: {{ raid.InstanceName }}
+        </div>
+        <div class="row h-25">
+        </div>
+      </div>
+    </div>
+  </div>
+</a>
