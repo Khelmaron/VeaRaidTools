@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-{% if raid_list %}
+
 <div class="container">
   <div class = 'jumbotron'>
     <h1>
@@ -20,57 +20,57 @@
       <tr>
         <td><a href={% url 'raid_details' pk=log.pk %} class="badge badge-dark"> {{ log.Raiddatum }}</a></td>
         <td>{{ log.InstanceName }}</td>
-<!--
-
-//-->
       </tr>
+      {% empty %}
+      <p>Sorry, no Raids in list =(</p>
       {% endfor %}
   </table>
 </div>
-  <!-- code here to list the books -->
-{% else %}
-  <p>There are no raids in the library.</p>
-{% endif %}
+
 <form method="post">{% csrf_token %}
   <button name='update_logs' type="submit">Logs importieren!</button>
 </form>
-
-<nav aria-label="Page navigation example">
-  <div class="row justify-content-center align-self-center">
-    <ul class="pagination">
-      <li class="page-item">
-        {% if page_obj.has_previous %}
-          <a class='page-link' href="?page={{ page_obj.previous_page_number }}">
-            prev
-          </a>
-        {% else %}
-          <span>prev</span>
-        {% endif %}
-      </li>
-
-      {% for page_number in paginator.page_range %}
-        {% if page_number == page_obj.number %}
-          <li class="page-item active">
-            <span class="page-link">{{ page_number }}</span>
-          </li>
-        {% else %}
-          <li>
-            <a class='page-link' href="?page={{ page_number }}">
-              {{ page_number }}
+<form method="post">{% csrf_token %}
+  <button name='delete_logs' type="submit">Alle Logs löschen!</button>
+</form>
+<div class='container'>
+  <nav aria-label="pagination example">
+    <div class="row justify-content-center align-self-center">
+      <ul class="pagination pagination-sm">
+        <li class="page-item">
+          {% if page_obj.has_previous %}
+            <a class='page-link' href="?page={{ page_obj.previous_page_number }}">
+              prev
             </a>
-          </li>
-        {% endif %}
-      {% endfor %}
-      <li>
-        {% if page_obj.has_next %}
-          <a class='page-link' href="?page={{ page_obj.next_page_number }}">
-            next
-          </a>
-        {% else %}
-          <span>next</span>
-        {% endif %}
-      </li>
-    </ul>
-  </div>
-</nav>
+          {% else %}
+            <span>prev</span>
+          {% endif %}
+        </li>
+
+        {% for page_number in paginator.page_range %}
+          {% if page_number == page_obj.number %}
+            <li class="page-item active">
+              <span class="page-link">{{ page_number }}</span>
+            </li>
+          {% else %}
+            <li>
+              <a class='page-link' href="?page={{ page_number }}">
+                {{ page_number }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        <li>
+          {% if page_obj.has_next %}
+            <a class='page-link' href="?page={{ page_obj.next_page_number }}">
+              next
+            </a>
+          {% else %}
+            <span>next</span>
+          {% endif %}
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
 {% endblock %}

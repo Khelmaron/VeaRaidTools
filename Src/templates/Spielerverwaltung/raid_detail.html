@@ -11,10 +11,10 @@
       <thead>
         <th>{{ raid.InstanceName }} vom {{ raid.Raiddatum }}</th>
       </thead>
-      {% for info in Raidinfomrationen %}
+      {% for info in raid.Raidteilnehmer.all %}
       <tr>
-        <td>{{ info.Teilnehmer.Spielername }}</td>
-        <td>{{ info.Teilnehmer }} </td>
+        <td>{{ info.Spielername }}</td>
+        <td>{{ info }} </td>
       </tr>
       {% endfor %}
       <p> {{ ValueTeilnehmer }} </p>

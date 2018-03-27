@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load playerattendence %}
+{% load raidtemplate %}
 {% block content %}
 <div class='container'>
   <div>
@@ -13,11 +15,24 @@
       <tbody>
       {% for char in characters %}
         <tr>
-          <td>{{ char }}</td>        
+          <td>{{ char }}</td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
   </div>
+  <div class="m-b-10">
+    Attendency über die letzten 30 Tage: <b>{{ spieler|attendence }}</b> %
+  </div>
+  <div class="row">
+    {% for raid in latest_raids %}
+    <div class="col-sm-4">
+      {% show_raid raid %}
+    </div>
+    {% endfor %}
+  </div>
+  <form method="post">{% csrf_token %}
+    <button name='delete_attendence' type="submit">Alle Teilnahmen löschen!</button>
+  </form>
 </div>
 {% endblock %}
