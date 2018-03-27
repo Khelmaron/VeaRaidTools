@@ -10,6 +10,8 @@ class Gildencharakter(models.Model):
     def __str__(self):
         return self.Charaktername
 
+    class Meta:
+        ordering = ['Charaktername']
 
 class Spieler(models.Model):
 
@@ -20,19 +22,38 @@ class Spieler(models.Model):
     def __str__(self):
         return self.Spielername
 
+    class Meta:
+        ordering = ['Anlagedatum']
+
 class Raid(models.Model):
 
-    WarcraftlogsID = models.CharField(max_length = 16, blank = True, null = True)
+    WarcraftlogsID = models.CharField(max_length = 16, blank = True, null = True, unique = True)
     InstanceName = models.CharField(max_length = 50)
     Raiddatum = models.DateTimeField()
     Raidteilnehmer = models.ManyToManyField(Gildencharakter, through = 'Raidinformationen')
+    Teilnehmr = models.ManyToManyField(Spieler, through = 'Attendency')
+
+    def __str__(self):
+        return self.WarcraftlogsID
+
+    class Meta:
+        ordering = ['-Raiddatum']
 
 class Raidinformationen(models.Model):
 
-    Teilnehmer = models.ForeignKey(Gildencharakter, on_delete=models.CASCADE)
+    Teilnehmer = models.ForeignKey(Gildencharakter, on_delete=models.PROTECT)
     Raid = models.ForeignKey(Raid, on_delete=models.CASCADE)
-    Spieler = models.ForeignKey(Spieler, on_delete=models.CASCADE, blank = True, null = True)
+#    Spieler = models.ForeignKey(Spieler, on_delete=models.CASCADE, blank = True, null = True)
+#    did_participate = models.BooleanField(default = False)
+
+class Attendency(models.Model):
+
+    Raid = models.ForeignKey(Raid, on_delete=models.CASCADE)
+    Spieler = models.ForeignKey(Spieler, on_delete=models.CASCADE)
     did_participate = models.BooleanField(default = False)
+
+    class Meta:
+        unique_together = (('Raid', 'Spieler'))
 
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
      class Meta:
