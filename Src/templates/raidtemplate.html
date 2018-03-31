@@ -1,11 +1,68 @@
-<a href={% url 'raid_details' pk=raid.pk %} style="color: rgb(0,0,0)" >
-  <div class="border-2" >
-    <div style='height: 200px' class="bg-dark">
+{% load staticfiles %}
+
+<style media="screen">
+  a {
+    color: black;
+  }
+
+  a:hover{
+    cursor: default;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+  }
+
+  .raidbox {
+    height: 200px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0,3;"
+  }
+
+  .raidboxSuc {
+    border: 5px solid green;
+  }
+
+  .raidboxfail {
+    border: 5px solid red;
+  }
+
+  .raidboxSuc:hover {
+    transform: scale(1.1);
+  }
+
+  .raidboxfail:hover {
+    transform: scale(1.1);
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+  }
+
+  .raidBoxHead {
+    position: absolute;
+    left: 40px;
+    top: 10px;
+
+  }
+
+</style>
+
+
+<div class="view overlay">
+  <a href={% url 'raid_details' pk=raid.pk %}>
+    <div class="bg-dark mb-4 raidbox container
       {% if background %}
-      <div class="container bg-success">
+      raidboxSuc
       {% else %}
-      <div class="container bg-danger">
-      {% endif %}
+      raidboxfail
+      {% endif %}">
+      <img src="{% static "images/Antorus_The_Burning_Throne_Raid_loading_screen.JPG" %}" class="img-responsive">
+      <div class="raidBoxHead">
         <div class="row h-25">
           Datum: {{ raid.Raiddatum }}
         </div>
@@ -16,5 +73,5 @@
         </div>
       </div>
     </div>
-  </div>
-</a>
+  </a>
+</div>
