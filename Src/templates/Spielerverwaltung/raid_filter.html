@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+
+  <table class="table table-sm table-dark">
+    <thead>
+      <th>Startzeitpunk</th>
+      <th></th>
+      <th></th>
+    </thead>
+    <tbody>
+      {% for raid in raid_list %}
+      {% scheduled_raid raid %}
+      {% empty %}
+      <p>No raids scheduled!</p>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+{% endblock %}

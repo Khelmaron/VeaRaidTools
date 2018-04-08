@@ -3,16 +3,15 @@ from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from .models import Gildencharakter, Spieler, Raid, Raidinformationen, PlayerSerializer, Attendency
-from .apiInterface import Guildmemberhandler, RaidlogInterface
-from .utils import get_raiddetails, get_new_logs
+from django.views.generic.edit import FormView, CreateView
+from .models import Gildencharakter, Spieler, Raid, Raidinformationen, PlayerSerializer, Attendency, RaidByStatus
+from .apiInterface import Guildmemberhandler, RaidlogInterface, AuthHandler
+from .utils import get_raiddetails, get_new_logs, delete_players, assign_player, get_chars, update_activity, delete_attendence
 import datetime
 from rest_framework import viewsets
 from rest_framework.response import Response
-
-from .forms import CreatePlayerForm
+from .forms import CreatePlayerForm, CreateRaidForm
 from django.forms import Form
-from .utils import delete_players, assign_player, get_chars, update_activity, delete_attendence
 
 class homeView(TemplateView):
 
@@ -95,11 +94,14 @@ class RaidoverView(ListView):
         if 'delete_logs' in request.POST:
             Raid.objects.all().delete()
             return HttpResponseRedirect('/Raiduebersicht/')
+#            AuthHandler.get_authCode()
 
         logs = get_new_logs()
         for log in logs:
             raid = Raid(WarcraftlogsID = log['id'], InstanceName = log['title'],
-                Raiddatum = datetime.datetime.fromtimestamp(log['start']/1000))
+                Raiddatum = datetime.datetime.fromtimestamp(log['start']/1000),
+                Raidstart = datetime.datetime.fromtimestamp(log['start']/1000),
+                Raidende = datetime.datetime.fromtimestamp(log['end']/1000))
             raid.save()
 
         return HttpResponseRedirect('/Raiduebersicht/')
@@ -146,3 +148,34 @@ class PlayerViewSet(viewsets.ModelViewSet):
 
     def getPlayers(self, request):
         return Response(serializer_class.data)
+
+#class ScheduledRaids(ListFilteredMixin, ListView):
+#    filter_set = RaidByStatus
+#    model = Raid
+#    template_name = 'scheduled_raids.html'
+#    paginate_by = 15
+
+#    def get_queryset(self):
+#
+#        queryset = Raid.objects.filter(raid_status = 'SC')
+#        return queryset
+
+def scheduled_raids(request):
+
+    f = RaidByStatus(request.GET, queryset = Raid.objects.all())
+    return render(request, 'Spielerverwaltung/scheduled_raids.html', { 'filter' : f })
+
+class Raidcreation(FormView):
+    template_name = 'create_raid.html'
+    form_class = CreateRaidForm
+    success_url = '/Raiduebersicht/'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        return HttpResponseRedirect('/Raiduebersicht/')
+
+class RaidCreate(CreateView):
+    model = Raid
+    template_name_suffix = '_create'
+    fields = ['Raidstart', 'Raidende', 'Teilnehmer']

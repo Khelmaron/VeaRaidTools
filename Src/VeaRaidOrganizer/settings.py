@@ -39,6 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Spielerverwaltung',
     'rest_framework',
+    'django_filters',
+#    'django.contrib.sites',
+#    'allauth',
+#    'allauth.account',
+#    'allauth.socialaccount',
+#    'allauth.socialaccount.providers.battlenet',
+#    'battlenet',
+#    'oauth2_provider',
+#    'oauthlib',
+    'requests_oauthlib',
 #    'webpack_loader',
 ]
 
@@ -101,6 +111,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+#AUTHENTICATION_BACKENDS = (
+#    'django.contrib.auth.backends.ModelBackend',
+#    'allauth.account.auth_backends.AuthenticationBackend',
+#)
 
 
 # Internationalization

@@ -16,12 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
-from Spielerverwaltung.views import homeView
-from Spielerverwaltung.views import playeroverView
-from Spielerverwaltung.views import charoverView
-from Spielerverwaltung.views import RaidoverView
-from Spielerverwaltung.views import RaidDetailView
-from Spielerverwaltung.views import PlayerViewSet, PlayerDetailView
+from Spielerverwaltung.views import (homeView,
+                                    playeroverView,
+                                    charoverView,
+                                    RaidoverView,
+                                    RaidDetailView,
+                                    PlayerViewSet,
+                                    PlayerDetailView,
+#                                    ScheduledRaids,
+                                    scheduled_raids,
+                                    Raidcreation,
+                                    RaidCreate)
+from django_filters.views import FilterView
+from Spielerverwaltung.models import Raid
+from Spielerverwaltung import views
 
 
 urlpatterns = [
@@ -29,9 +37,11 @@ urlpatterns = [
     url(r'^$', homeView.as_view()),
     url(r'^Charakteruebersicht/', charoverView.as_view(), name = 'Charakteruebersicht'),
     url(r'^Spieleruebersicht/', playeroverView.as_view(), name = 'Spieleruebersicht'),
-    url(r'^Raiduebersicht/', RaidoverView.as_view(), name = 'Spieleruebersicht'),
+    url(r'^Raiduebersicht/', RaidoverView.as_view(), name = 'raid_overview'),
     url(r'^Raiddetail/(?P<pk>\d+)/$', RaidDetailView.as_view(), name = 'raid_details'),
     url(r'^api/', PlayerViewSet.as_view({'get' : 'getPlayers'})), #  include('rest_framework.urls', namespace='rest_framework'))
-    url(r'^Playerdetail/(?P<pk>[-\w]+)/$', PlayerDetailView.as_view(), name = 'player_details')
-
+    url(r'^Playerdetail/(?P<pk>[-\w]+)/$', PlayerDetailView.as_view(), name = 'player_details'),
+    url(r'^Raidschedule/', views.scheduled_raids, name = 'raid_schedule'),
+    url(r'^CreateRaid/', Raidcreation.as_view(), name = 'create_raid'),
+    url(r'^RaidCreator/', RaidCreate.as_view(), name = 'createraid')
 ]
