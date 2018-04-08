@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+  <form method="post" name="submit_raid">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="submit_raid" value='Create Raid'>
+  </form>
+</div>
+
+{% endblock %}

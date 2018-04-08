@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load scheduledraid %}
+{% block content %}
+
+<div class="container">
+
+  <table class="table table-sm table-dark">
+    <thead>
+      <th>Name</th>
+      <th>Geplanter Start</th>
+      <th>Geplantes Ende</th>
+      <th>Anmeldestatistik</th>
+    </thead>
+    <tbody>
+      {% for raid in raid_list %}
+      {% scheduled status %}
+      {% empty %}
+      <p>No raids scheduled!</p>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="container">
+  <a href={% url 'createraid' %} class="btn btn-success">Create Raid</a>  
+</div>
+
+{% endblock %}
