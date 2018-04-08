@@ -14,12 +14,14 @@
       <tr>
         <th>Datum</th>
         <th>Instanzname</th>
+        <th>Link zu Warcraftlogs</th>
       </tr>
     </thead>
       {% for log in raid_list %}
       <tr>
         <td><a href={% url 'raid_details' pk=log.pk %} class="badge badge-dark"> {{ log.Raiddatum }}</a></td>
         <td>{{ log.InstanceName }}</td>
+        <td><a href="https://www.warcraftlogs.com/reports/{{ log.WarcraftlogsID }}" class="badge badge-dark"> {{ log.WarcraftlogsID }}</a></td>
       </tr>
       {% empty %}
       <p>Sorry, no Raids in list =(</p>

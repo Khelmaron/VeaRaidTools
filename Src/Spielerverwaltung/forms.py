@@ -13,7 +13,10 @@ class CreateRaidForm(ModelForm):
             'Raidstart' : forms.DateTimeInput(attrs= {'type' : 'datetime-local'}),
             'Raidende'  : forms.DateTimeInput(attrs= {'type' : 'datetime-local'})
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> AllAuth-Test
 ##class linkPlayer(forms.Form):
 
 ##    Spieler = forms.
